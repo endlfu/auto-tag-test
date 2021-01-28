@@ -21,13 +21,13 @@ jobs:
           MinorVersion=`git describe --tags $(git rev-list --tags --max-count=1) | awk '{split($0, version, "."); print version[2]}'`
           PatchVersion=`git describe --tags $(git rev-list --tags --max-count=1) | awk '{split($0, version, "."); print version[3]}'`
           CurrentVersion=`git describe --tags $(git rev-list --tags --max-count=1)`
-          echo "v${MajorVersion:1}.$MinorVersion.$PatchVersion"
+          echo "::set-output name=tag::v${MajorVersion:1}.$MinorVersion.$PatchVersion"
       - name: Get Merge History
         id: get-merge-history
         run: |
           History=`git log --first-parent --merges --reverse --pretty='%s %b' origin/develop..origin/master`
-          echo "${History}"
+          echo "::set-output name=history::${History}"
       - name: Tag snapshot
         run: |
-          git tag ${{ steps.get-next-version-tag.outputs.tag }} -m "${{ steps.get-merge-history.outputs.tag }}"
+          git tag ${{ steps.get-next-version-tag.outputs.tag }} -m "${{ steps.get-merge-history.outputs.history }}"
 
