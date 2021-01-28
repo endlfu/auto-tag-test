@@ -1,28 +1,30 @@
+name: Auto Tag
+
 on:
-  pull_request:
+  push:
     branches:
       - master
-    types: [closed]
-
-name: Add release tag
 
 jobs:
-  tag:
-    name: Add release tag
+  production:
+    if: github.ref == 'master' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
     steps:
-      - name: Get version
-        uses: technote-space/get-next-version-action@v1
-        with:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-      - uses: actions/github-script@0.4.0
-        with:
-          github-token: ${{ secrets.ACCESS_TOKEN }}
-          script: |
-            github.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: `refs/tags/${process.env.NEXT_VERSION}`,
-              sha: context.sha
-            })
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Unshallow
+        run: git fetch --prune --unshallow --tags
+      - name: Get Next Version TAG
+        id: get-next-version-tag
+        run: |
+          MajorVersion=`git describe --tags $(git rev-list --tags --max-count=1) | awk '{split($0, version, "."); print version[1]}'`
+          MinorVersion=`git describe --tags $(git rev-list --tags --max-count=1) | awk '{split($0, version, "."); print version[2]}'`
+          PatchVersion=`git describe --tags $(git rev-list --tags --max-count=1) | awk '{split($0, version, "."); print version[3]}'`
+          CurrentVersion=`git describe --tags $(git rev-list --tags --max-count=1)`
+          echo "v${MajorVersion:1}.$MinorVersion.$PatchVersion"
+      - name: Get Merge History
+        id: get-merge-history
+        run: git describe --tags $(git rev-list --tags --max-count=1) | awk '{split($0, version, "."); print version[2]}'
+      - name: Tag snapshot
+        run: |
+          git tag ${{ steps.get-next-version-tag.outputs.tag }} -m "${{ steps.get-merge-history }}"
