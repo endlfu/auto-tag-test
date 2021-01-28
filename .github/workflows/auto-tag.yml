@@ -6,8 +6,8 @@ on:
       - master
 
 jobs:
-  production:
-    if: github.ref == 'master' && github.event.pull_request.merged == true
+  autotag:
+    #if: github.ref == 'master' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
