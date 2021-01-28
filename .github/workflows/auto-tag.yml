@@ -29,5 +29,5 @@ jobs:
           echo "::set-output name=history::${History}"
       - name: Tag snapshot
         run: |
-          git tag ${{ steps.get-next-version-tag.outputs.tag }} -m '${{ steps.get-merge-history.outputs.history }}'
+          git tag ${{ steps.get-next-version-tag.outputs.tag }} -F- << EOM ${{ steps.get-merge-history.outputs.history }} EOM
 
