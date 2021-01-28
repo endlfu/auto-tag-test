@@ -3,10 +3,10 @@ name: Auto Tag
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
-  autotag2:
+  autotag:
     #if: github.ref == 'master' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
