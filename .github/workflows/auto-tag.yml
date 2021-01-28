@@ -15,7 +15,7 @@ jobs:
       - name: Get version
         uses: technote-space/get-next-version-action@v1
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       - uses: actions/github-script@0.4.0
         with:
           github-token: ${{ secrets.ACCESS_TOKEN }}
