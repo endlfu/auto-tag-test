@@ -26,7 +26,7 @@ jobs:
         id: get-merge-history
         run: |
           History=`git log --first-parent --merges --reverse --pretty='%s %b' origin/develop..origin/master`
-          echo "v${MajorVersion:1}.$MinorVersion.$PatchVersion"
+          echo "${History}"
       - name: Tag snapshot
         run: |
           git tag ${{ steps.get-next-version-tag.outputs.tag }} -m "${{ steps.get-merge-history.outputs.tag }}"
