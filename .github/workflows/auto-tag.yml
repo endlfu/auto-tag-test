@@ -25,7 +25,7 @@ jobs:
       - name: Get Merge History
         id: get-merge-history
         run: |
-          History=`git log --first-parent --merges --reverse --pretty='%s %b' origin/develop..origin/master`
+          History=$(git log --first-parent --merges --reverse --pretty='%s %b' origin/develop..origin/master)
           echo "::set-output name=history::${History}"
       - name: Tag snapshot
         run: |
