@@ -32,7 +32,7 @@ jobs:
           git config --global user.email "sushi@c-fo.com"
           git config --global user.name "sushi"
           History=$(git log --first-parent --merges --reverse --pretty='%s %b' origin/develop..origin/master)
-          git tag ${{ steps.get-next-version-tag.outputs.tag }} -F- <<EOM
+          git tag ${{ steps.get-next-version-tag.outputs.tag }} -m "
           ${History}
-          EOM
+          "
           echo $(git log --first-parent --merges --reverse --pretty='%s %b' origin/develop..origin/master)
