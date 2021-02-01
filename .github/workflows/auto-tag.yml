@@ -32,6 +32,6 @@ jobs:
           git config --global user.email "sushi@c-fo.com"
           git config --global user.name "sushi"
           git tag ${{ steps.get-next-version-tag.outputs.tag }} -F- <<EOM
-          ${{ steps.get-merge-history.outputs.history }}
+          $(git log --first-parent --merges --reverse --pretty='%s %b' origin/develop..origin/master)
           EOM
           echo ${{ steps.get-merge-history.outputs.history }}
